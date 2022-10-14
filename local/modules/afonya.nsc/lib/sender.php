@@ -10,8 +10,6 @@ use Bitrix\Main\Entity;
 
 class Sender
 {
-
-
     public function send()
     {
         $sendParams = new Collector();
@@ -30,14 +28,11 @@ class Sender
             "DESCRIPTION" => $description,
         );
 
-        AddMessage2Log(
-            $message,
-            "afonya.nsc"
-        );
         if (\CEvent::Send("AFONYA_NSC_STAT", 's1', $arEventFields)) {
             // Если отправилось - сохраняем пределы диапазона
             Option::set("afonya.nsc", 'last_id', $sendParams->toID);
             Option::set("afonya.nsc", 'last_time', $sendParams->toTime);
         }
+        return "\Afonya\NSC\Sender::send();";
     }
 }
