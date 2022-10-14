@@ -58,7 +58,7 @@ class Sender
     {
 
         // Берем последний ID с которым будем работать
-        $result = Afonya\NSC\EventsTable::getList(
+        $result = EventsTable::getList(
             array(
                 'select' => array('ID', 'TIME'),
                 'order' => array('TIME' => 'desc'),
@@ -77,7 +77,7 @@ class Sender
             $arParams['TYPE'] = 'ARTICLE_ID';
         }
         $result =
-            Afonya\NSC\EventsTable::getList(
+            EventsTable::getList(
                 array(
                     'select' => array('CNT', $arParams['TYPE']),
                     'filter' => array(
@@ -116,6 +116,10 @@ class Sender
             "DESCRIPTION" => $description,
         );
 
+        AddMessage2Log(
+            $message,
+            "afonya.nsc"
+        );
         if (\CEvent::Send("AFONYA_NSC_STAT", 's1', $arEventFields)) {
             // Если отправилось - сохраняем пределы диапазона
             Option::get("afonya.nsc", 'last_id', $this->toID);
