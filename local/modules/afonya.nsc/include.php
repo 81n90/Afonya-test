@@ -9,6 +9,7 @@ Bitrix\Main\Loader::registerAutoloadClasses(
     array(
         'Afonya\NSC\Register' => 'lib/register.php',
         'Afonya\NSC\EventsTable' => 'lib/events.php',
+        'Afonya\NSC\Collector' => 'lib/collector.php',
         'Afonya\NSC\Sender' => 'lib/sender.php',
     )
 );
