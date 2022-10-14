@@ -33,6 +33,8 @@ class Sender
             Option::set("afonya.nsc", 'last_id', $sendParams->toID);
             Option::set("afonya.nsc", 'last_time', $sendParams->toTime);
         }
-        return "\Afonya\NSC\Sender::send();";
+
+        // Возврат функции класса, для повторной периодической отработки агента
+        return static::class."::send();";
     }
 }
