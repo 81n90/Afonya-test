@@ -44,12 +44,12 @@ class Sender
     {
 
         // Получаем ID после которого идет выборка
-        if (!$this->fromID = Option::get("afonya.nsc", 'last_id')) {
+        if (!$this->fromID = (int) Option::get("afonya.nsc", 'last_id')) {
             $this->fromID = 0;
         }
 
         // Время с которого будет показана выборка
-        if (!$this->fromID = Option::get("afonya.nsc", 'last_time')) {
+        if (!$this->fromID = (int) Option::get("afonya.nsc", 'last_time')) {
             $this->fromTime = 'момента установки модуля';
         }
     }
@@ -67,8 +67,8 @@ class Sender
         )->fetchAll();
 
         // Сохраняем ID и время
-        $this->toID = $result['ID'];
-        $this->toTime = $result['TIME'];
+        $this->toID = (int) $result['ID'];
+        $this->toTime = $result['TIME'] ? $result['TIME'] : 'нет данных';
     }
 
     protected function getCount($arParams)
@@ -102,14 +102,16 @@ class Sender
 
     public function send()
     {
+        $sendParams = new Sender();
+
         // Формируем письмо
         $description = 'Статистика по новостям: ';
-        $message = 'Статистика по новостям за период с ' . $this->fromTime . ' по ' . $this->toTime . ' <br/>';
-        $message .= 'всего было добавлено: ' . $this->arCount['ADDED'] . ' <br/>';
-        $message .= 'всего было отредактировано: ' . $this->arCount['UPDATED'] . ' <br/>';
-        $message .= 'всего было удалено: ' . $this->arCount['DELETED'] . ' <br/>';
+        $message = 'Статистика по новостям за период с ' . $sendParams->fromTime . ' по ' . $sendParams->toTime . ' <br/>';
+        $message .= 'всего было добавлено: ' . $sendParams->arCount['ADDED'] . ' <br/>';
+        $message .= 'всего было отредактировано: ' . $sendParams->arCount['UPDATED'] . ' <br/>';
+        $message .= 'всего было удалено: ' . $sendParams->arCount['DELETED'] . ' <br/>';
         $message .= 'уникальных статей.<br/>';
-        $message .= 'Наибольшее число изменений внес: ' . $this->arCount['FIO'] . '<br/>';
+        $message .= 'Наибольшее число изменений внес: ' . $sendParams->arCount['FIO'] . '<br/>';
         $arEventFields = array(
             "MESSAGE" => $message,
             "EMAIL_TO" => implode(",", Option::get("afonya.nsc", 'email')),
@@ -122,8 +124,8 @@ class Sender
         );
         if (\CEvent::Send("AFONYA_NSC_STAT", 's1', $arEventFields)) {
             // Если отправилось - сохраняем пределы диапазона
-            Option::get("afonya.nsc", 'last_id', $this->toID);
-            Option::get("afonya.nsc", 'last_time', $this->toTime);
+            Option::get("afonya.nsc", 'last_id', $sendParams->toID);
+            Option::get("afonya.nsc", 'last_time', $sendParams->toTime);
         }
     }
 }
