@@ -49,7 +49,7 @@ class Collector
         }
 
         // Время с которого будет показана выборка
-        if (!$this->fromID = (int) Option::get("afonya.nsc", 'last_time')) {
+        if (!$this->fromTime = Option::get("afonya.nsc", 'last_time')) {
             $this->fromTime = 'момента установки модуля';
         }
     }
