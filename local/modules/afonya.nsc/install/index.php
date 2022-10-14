@@ -71,7 +71,7 @@ class afonya_nsc extends CModule
     {
         // Создаем таблицу в базе
         if (Loader::includeModule($this->MODULE_ID)) {
-//            EventsTable::getEntity()->createDbTable();
+            EventsTable::getEntity()->createDbTable();
         }
 
     }
@@ -113,7 +113,7 @@ class afonya_nsc extends CModule
         global $APPLICATION;
 
         $this->uninstallFiles();
-//        $this->uninstallDB();
+        $this->uninstallDB();
         $this->uninstallEvents();
 
         ModuleManager::unRegisterModule($this->MODULE_ID);
