@@ -12,7 +12,7 @@ class Collector
 {
     public int $fromID;
     public int $toID;
-    public ?string $fromTime = null;
+    public string $fromTime;
     public string $toTime;
     public array $arCount;
 
